@@ -1,7 +1,5 @@
 package back_end;
 
-
-
 public class ArbolBST {
 
     private NodoBST raiz;
@@ -22,7 +20,7 @@ public class ArbolBST {
             return new NodoBST(empleado);
         }
 
-        int idActual = nodo.dato().id();
+        int idActual = nodo.getDato().id();
         int idNuevo = empleado.id();
 
         if (idNuevo < idActual) {
@@ -30,7 +28,6 @@ public class ArbolBST {
         } else if (idNuevo > idActual) {
             nodo.setDerecho(insertarNodo(nodo.getDerecho(), empleado));
         }
-        // Si el id es igual, no se permite insertar duplicados
 
         return nodo;
     }
@@ -43,7 +40,7 @@ public class ArbolBST {
         if (encontrado == null) {
             return null;
         }
-        return encontrado.dato();
+        return encontrado.getDato();
     }
 
     private NodoBST buscarNodo(NodoBST nodo, int id) {
@@ -51,7 +48,7 @@ public class ArbolBST {
             return null;
         }
 
-        int idActual = nodo.dato().id();
+        int idActual = nodo.getDato().id();
 
         if (id == idActual) {
             return nodo;
@@ -74,7 +71,7 @@ public class ArbolBST {
             return null;
         }
 
-        int idActual = nodo.getEmpleado().id();
+        int idActual = nodo.getDato().id();
 
         if (id < idActual) {
             nodo.setIzquierdo(eliminarNodo(nodo.getIzquierdo(), id));
@@ -84,27 +81,21 @@ public class ArbolBST {
             return nodo;
         }
 
-        // Nodo encontrado para eliminar
-
-        // Caso 1: Hoja
         if (nodo.getIzquierdo() == null && nodo.getDerecho() == null) {
             return null;
         }
 
-        // Caso 2: Solo tiene hijo derecho
         if (nodo.getIzquierdo() == null) {
             return nodo.getDerecho();
         }
 
-        // Caso 2: Solo tiene hijo izquierdo
         if (nodo.getDerecho() == null) {
             return nodo.getIzquierdo();
         }
 
-        // Caso 3: Tiene dos hijos - Se toma el sucesor inorden (menor del subárbol derecho)
         NodoBST sucesor = obtenerMinimo(nodo.getDerecho());
-        nodo.setEmpleado(sucesor.getEmpleado());
-        nodo.setDerecho(eliminarNodo(nodo.getDerecho(), sucesor.getEmpleado().id()));
+        nodo.setDato(sucesor.getDato());
+        nodo.setDerecho(eliminarNodo(nodo.getDerecho(), sucesor.getDato().id()));
 
         return nodo;
     }
@@ -125,7 +116,7 @@ public class ArbolBST {
     private void recorrerInOrden(NodoBST nodo, StringBuilder texto) {
         if (nodo != null) {
             recorrerInOrden(nodo.getIzquierdo(), texto);
-            texto.append(nodo.getEmpleado().toString()).append("\n");
+            texto.append(nodo.getDato().toString()).append("\n");
             recorrerInOrden(nodo.getDerecho(), texto);
         }
     }
@@ -138,7 +129,7 @@ public class ArbolBST {
 
     private void recorrerPreOrden(NodoBST nodo, StringBuilder texto) {
         if (nodo != null) {
-            texto.append(nodo.getEmpleado().toString()).append("\n");
+            texto.append(nodo.getDato().toString()).append("\n");
             recorrerPreOrden(nodo.getIzquierdo(), texto);
             recorrerPreOrden(nodo.getDerecho(), texto);
         }
@@ -154,7 +145,7 @@ public class ArbolBST {
         if (nodo != null) {
             recorrerPostOrden(nodo.getIzquierdo(), texto);
             recorrerPostOrden(nodo.getDerecho(), texto);
-            texto.append(nodo.getEmpleado().toString()).append("\n");
+            texto.append(nodo.getDato().toString()).append("\n");
         }
     }
 
@@ -237,7 +228,7 @@ public class ArbolBST {
     private void llenarArregloInOrden(NodoBST nodo, Empleado[] arreglo, final int[] indice) {
         if (nodo != null) {
             llenarArregloInOrden(nodo.getIzquierdo(), arreglo, indice);
-            arreglo[indice[0]] = nodo.getEmpleado();
+            arreglo[indice[0]] = nodo.getDato();
             indice[0]++;
             llenarArregloInOrden(nodo.getDerecho(), arreglo, indice);
         }
