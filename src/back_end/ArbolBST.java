@@ -253,4 +253,29 @@ public class ArbolBST {
     public boolean estaVacio() {
         return raiz == null;
     }
+
+    public String mostrarEstructura() {
+        StringBuilder sb = new StringBuilder();
+        if (raiz == null) {
+            return "Árbol vacío.";
+        }
+        mostrarEstructuraRec(raiz, "", true, sb);
+        String resultado = sb.toString();
+        return resultado.isEmpty() ? "Árbol vacío." : resultado;
+    }
+
+    private void mostrarEstructuraRec(NodoBST nodo, String prefijo, boolean esUltimo, StringBuilder sb) {
+        if (nodo == null) {
+            return;
+        }
+        sb.append(prefijo);
+        if (esUltimo) {
+            sb.append("└── ");
+        } else {
+            sb.append("├── ");
+        }
+        sb.append(nodo.getDato().id()).append(" - ").append(nodo.getDato().nombre()).append("\n");
+        mostrarEstructuraRec(nodo.getIzquierdo(), prefijo + (esUltimo ? "    " : "│   "), false, sb);
+        mostrarEstructuraRec(nodo.getDerecho(), prefijo + (esUltimo ? "    " : "│   "), true, sb);
+    }
 }

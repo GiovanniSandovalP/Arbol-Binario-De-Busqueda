@@ -37,9 +37,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
     private JButton btnProfundidad;
     private JButton btnBalancear;
     private JButton btnDestruir;
+    private JButton btnVerArbol;
 
     private JTextArea txtAreaResultados;
     private JScrollPane scrollResultados;
+    private VistaArbolPanel vistaArbolPanel;
+    private JTextArea txtVistaArbol;
+    private JScrollPane scrollVistaArbol;
 
     public VentanaPrincipal() {
         initComponents();
@@ -93,7 +97,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         panelBotonesIzq.add(btnBuscar);
         panelBotonesIzq.add(btnEliminar);
 
-        JPanel panelBotonesDer = new JPanel(new GridLayout(7, 1, 5, 5));
+        JPanel panelBotonesDer = new JPanel(new GridLayout(8, 1, 5, 5));
         panelBotonesDer.setBorder(BorderFactory.createTitledBorder("Operaciones"));
 
         btnInOrden = new JButton("Mostrar InOrden");
@@ -103,6 +107,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         btnProfundidad = new JButton("Calcular profundidad");
         btnBalancear = new JButton("Balancear arbol");
         btnDestruir = new JButton("Destruir arbol");
+        btnVerArbol = new JButton("Ver arbol");
 
         btnInOrden.addActionListener(this);
         btnPreOrden.addActionListener(this);
@@ -111,6 +116,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         btnProfundidad.addActionListener(this);
         btnBalancear.addActionListener(this);
         btnDestruir.addActionListener(this);
+        btnVerArbol.addActionListener(this);
 
         panelBotonesDer.add(btnInOrden);
         panelBotonesDer.add(btnPreOrden);
@@ -119,6 +125,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         panelBotonesDer.add(btnProfundidad);
         panelBotonesDer.add(btnBalancear);
         panelBotonesDer.add(btnDestruir);
+        panelBotonesDer.add(btnVerArbol);
 
         JPanel panelSuperior = new JPanel(new BorderLayout());
         panelSuperior.add(panelDatos, BorderLayout.CENTER);
@@ -132,8 +139,14 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         scrollResultados = new JScrollPane(txtAreaResultados);
         scrollResultados.setBorder(BorderFactory.createTitledBorder("Resultados / Mensajes"));
 
+        vistaArbolPanel = new VistaArbolPanel();
+
+        JPanel panelInferior = new JPanel(new GridLayout(2, 1, 5, 5));
+        panelInferior.add(scrollResultados);
+        panelInferior.add(vistaArbolPanel);
+
         add(panelSuperior, BorderLayout.NORTH);
-        add(scrollResultados, BorderLayout.CENTER);
+        add(panelInferior, BorderLayout.CENTER);
     }
 
     @Override
@@ -160,6 +173,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
             balancearArbol();
         } else if (e.getSource() == btnDestruir) {
             destruirArbol();
+        } else if (e.getSource() == btnVerArbol) {
+            verArbol();
         }
     }
 
@@ -356,10 +371,22 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
     private void destruirArbol() {
         if (arbol == null) {
             txtAreaResultados.setText("El arbol ya no existe o ya fue destruido.");
+            if (vistaArbolPanel != null) {
+                vistaArbolPanel.limpiar();
+            }
             return;
         }
         arbol.destruirArbol();
         arbol = null;
         txtAreaResultados.setText("Arbol destruido. Se ha eliminado toda la informacion.");
+        if (vistaArbolPanel != null) {
+            vistaArbolPanel.limpiar();
+        }
+    }
+
+    private void verArbol() {
+        if (vistaArbolPanel != null) {
+            vistaArbolPanel.mostrarArbol(arbol);
+        }
     }
 }
